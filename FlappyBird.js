@@ -69,6 +69,12 @@ function DrawBird(){
 }
 
 function CreateObstacles(){
+    let random = Math.random();
+    let randomTopY = Math.floor(random * (-200 - -250 + 1)) + -200;
+    let randomBottomY = Math.floor(random * (450 - 400 + 1)) + 400;
+
+    obstacleBottomImage = new Image();
+    obstacleBottomImage.src = "./Bottom.png"
 
     obstacleTopImage = new Image();
     obstacleTopImage.src = "./Top.png"
@@ -78,16 +84,16 @@ function CreateObstacles(){
 
             let topObstacle = {
                 image : obstacleTopImage,
-                x : obstacleXPos,
-                y : obstacleYPos,
+                x : obstacleXPos + i * 180-64,
+                y : randomTopY,
                 width : obstacleWidth,
                 height : obstacleHeight,
             }
 
             let bottomObstacle = {
                 image : obstacleBottomImage,
-                x : obstacleXPos,
-                y : obstacleYPos,
+                x : obstacleXPos + i * 180-64,
+                y : randomBottomY,
                 width : obstacleWidth,
                 height : obstacleHeight
             }
@@ -114,5 +120,17 @@ function DrawObstacles(){
         let bottom = obstacleArray[i].bottom;
         context.drawImage(bottom.image, bottom.x, bottom.y, bottom.width, bottom.height)
         bottom.x += obstacleMoveSpeed;
+
+        if (top.x < -obstacleWidth){
+            let random = Math.random();
+            let randomTopY = Math.floor(random * (-200 - -250 + 1)) + -200;
+            let randomBottomY = Math.floor(random * (450 - 400 + 1)) + 400;
+
+            top.x = 360+180-64;
+            bottom.x = 360+180-64;
+
+            top.y = randomTopY;
+            bottom.y = randomBottomY;
+        }
     }
 }

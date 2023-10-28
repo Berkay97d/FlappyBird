@@ -21,10 +21,13 @@ let bird = {        // BIRD OBJECT
 let obstacleArray= [];
 let obstacleWidth = 64;
 let obstacleHeight = 512;
-let obstacleXPos = 360;
-let obstacleYPos = 0;
 let obstacleTopImage;
 let obstacleBottomImage;
+let obstacleGap = 180;
+let obstacleTopMaxY = -175;
+let obstacleTopMinY = -275;
+let obstacleBottomMaxY = 475;
+let obstacleBottomMinY = 375;
 let obstacleMoveSpeed = -2;
 
 
@@ -70,8 +73,8 @@ function DrawBird(){
 
 function CreateObstacles(){
     let random = Math.random();
-    let randomTopY = Math.floor(random * (-200 - -250 + 1)) + -200;
-    let randomBottomY = Math.floor(random * (450 - 400 + 1)) + 400;
+    let randomTopY = Math.floor(random * (obstacleTopMaxY - obstacleTopMinY + 1)) + obstacleTopMinY;
+    let randomBottomY = Math.floor(random * (obstacleBottomMaxY - obstacleBottomMinY + 1)) + obstacleBottomMinY;
 
     obstacleBottomImage = new Image();
     obstacleBottomImage.src = "./Bottom.png"
@@ -84,7 +87,7 @@ function CreateObstacles(){
 
             let topObstacle = {
                 image : obstacleTopImage,
-                x : obstacleXPos + i * 180-64,
+                x : boardWidth + i * obstacleGap-obstacleWidth + 150,
                 y : randomTopY,
                 width : obstacleWidth,
                 height : obstacleHeight,
@@ -92,7 +95,7 @@ function CreateObstacles(){
 
             let bottomObstacle = {
                 image : obstacleBottomImage,
-                x : obstacleXPos + i * 180-64,
+                x : boardWidth + i * obstacleGap-obstacleWidth + 150,
                 y : randomBottomY,
                 width : obstacleWidth,
                 height : obstacleHeight
@@ -123,11 +126,11 @@ function DrawObstacles(){
 
         if (top.x < -obstacleWidth){
             let random = Math.random();
-            let randomTopY = Math.floor(random * (-200 - -250 + 1)) + -200;
-            let randomBottomY = Math.floor(random * (450 - 400 + 1)) + 400;
+            let randomTopY = Math.floor(random * (obstacleTopMaxY - obstacleTopMinY + 1)) + obstacleTopMinY;
+            let randomBottomY = Math.floor(random * (obstacleBottomMaxY - obstacleBottomMinY + 1)) + obstacleBottomMinY;
 
-            top.x = 360+180-64;
-            bottom.x = 360+180-64;
+            top.x = boardWidth+obstacleGap-obstacleWidth;
+            bottom.x = boardWidth+obstacleGap-obstacleWidth;
 
             top.y = randomTopY;
             bottom.y = randomBottomY;

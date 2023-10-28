@@ -19,6 +19,8 @@ let bird = {        // BIRD OBJECT
 let birdGravity = .1;
 let birdYVelocity = 0;
 let birdJumpForce = -3.25
+let birdUpYLimit = -50;
+let birdDownYLimit = 560;
 
 //obstaclePart
 let obstacleArray= [];
@@ -74,6 +76,15 @@ function CreateBird() {
 
 function DrawBird(){
     bird.y += birdYVelocity;
+
+    if (bird.y < birdUpYLimit){
+        bird.y = birdUpYLimit;
+        birdYVelocity = 0;
+    }
+    else if (bird.y > birdDownYLimit){
+        bird.y = birdDownYLimit;
+    }
+
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 }
 
@@ -93,7 +104,7 @@ function CreateObstacles(){
 
             let topObstacle = {
                 image : obstacleTopImage,
-                x : boardWidth + i * obstacleGap-obstacleWidth + 150,
+                x : boardWidth + i * obstacleGap-obstacleWidth + 300,
                 y : randomTopY,
                 width : obstacleWidth,
                 height : obstacleHeight,
@@ -101,7 +112,7 @@ function CreateObstacles(){
 
             let bottomObstacle = {
                 image : obstacleBottomImage,
-                x : boardWidth + i * obstacleGap-obstacleWidth + 150,
+                x : boardWidth + i * obstacleGap-obstacleWidth + 300,
                 y : randomBottomY,
                 width : obstacleWidth,
                 height : obstacleHeight

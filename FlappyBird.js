@@ -16,6 +16,9 @@ let bird = {        // BIRD OBJECT
     width : birdWidth,
     height : birdHeight
 }
+let birdGravity = .1;
+let birdYVelocity = 0;
+let birdJumpForce = -3.25
 
 //obstaclePart
 let obstacleArray= [];
@@ -24,10 +27,10 @@ let obstacleHeight = 512;
 let obstacleTopImage;
 let obstacleBottomImage;
 let obstacleGap = 180;
-let obstacleTopMaxY = -175;
-let obstacleTopMinY = -275;
-let obstacleBottomMaxY = 475;
-let obstacleBottomMinY = 375;
+let obstacleTopMaxY = -150;
+let obstacleTopMinY = -300;
+let obstacleBottomMaxY = 500;
+let obstacleBottomMinY = 350;
 let obstacleMoveSpeed = -2;
 
 
@@ -35,6 +38,7 @@ window.onload = function () {
     Start();
 
     requestAnimationFrame(Update);
+    document.addEventListener("keydown", Jump);
 }
 
 function Start(){
@@ -49,6 +53,7 @@ function Update(){
 
     DrawBird();
     DrawObstacles();
+    ApplyGravity();
 }
 
 function CreateBoard() {
@@ -68,6 +73,7 @@ function CreateBird() {
 }
 
 function DrawBird(){
+    bird.y += birdYVelocity;
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 }
 
@@ -136,4 +142,19 @@ function DrawObstacles(){
             bottom.y = randomBottomY;
         }
     }
+}
+
+function Jump(e){
+    if (e.code == "Space" || e.code == "KeyX"){
+        if (birdYVelocity > 0){
+            birdYVelocity = 0;
+            birdYVelocity += birdJumpForce;
+        }else {
+            birdYVelocity += birdJumpForce;
+        }
+    }
+}
+
+function ApplyGravity(){
+    birdYVelocity += birdGravity;
 }

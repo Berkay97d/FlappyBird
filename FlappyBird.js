@@ -35,6 +35,9 @@ let obstacleBottomMaxY = 500;
 let obstacleBottomMinY = 350;
 let obstacleMoveSpeed = -2;
 
+//game
+let score = 0;
+
 
 window.onload = function () {
     Start();
@@ -51,6 +54,9 @@ function Start(){
 
 function Update(){
     requestAnimationFrame(Update)
+
+    if (CheckIsGameOver()) return;
+
     context.clearRect(0,0, board.width, board.height);
 
     DrawBird();
@@ -104,7 +110,7 @@ function CreateObstacles(){
 
             let topObstacle = {
                 image : obstacleTopImage,
-                x : boardWidth + i * obstacleGap-obstacleWidth + 300,
+                x : boardWidth + i * obstacleGap-obstacleWidth + 450,
                 y : randomTopY,
                 width : obstacleWidth,
                 height : obstacleHeight,
@@ -112,7 +118,7 @@ function CreateObstacles(){
 
             let bottomObstacle = {
                 image : obstacleBottomImage,
-                x : boardWidth + i * obstacleGap-obstacleWidth + 300,
+                x : boardWidth + i * obstacleGap-obstacleWidth + 450,
                 y : randomBottomY,
                 width : obstacleWidth,
                 height : obstacleHeight
@@ -168,4 +174,27 @@ function Jump(e){
 
 function ApplyGravity(){
     birdYVelocity += birdGravity;
+}
+
+function CheckIsGameOver(){
+    for (let i = 0; i < obstacleArray; i++)
+    {
+        if (DetectCollusion(bird, obstacleArray[i].top)){
+            return true;
+        }
+        else if(DetectCollusion(bird, obstacleArray[i].bottom)){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function DetectCollusion(obj1, obj2){
+    return obj1.x + obj1.width >= obj2.x &&
+        obj1.x <= obj2.x + obj2.width &&
+        obj1.y + obj1.height >= obj2.y &&
+        obj1.y <= obj2.y + obj2.height;
+
+
 }

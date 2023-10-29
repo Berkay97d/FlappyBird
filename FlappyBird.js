@@ -62,6 +62,8 @@ function Update(){
     DrawBird();
     DrawObstacles();
     ApplyGravity();
+    CalculateScore();
+    DrawScore();
 }
 
 function CreateBoard() {
@@ -157,6 +159,8 @@ function DrawObstacles(){
 
             top.y = randomTopY;
             bottom.y = randomBottomY;
+
+            obstacleArray[i].isPassed = false;
         }
     }
 }
@@ -187,14 +191,31 @@ function CheckIsGameOver(){
         }
     }
 
+    if (bird.y >= birdDownYLimit){
+        return true;
+    }
+
     return false;
 }
 
 function DetectCollusion(obj1, obj2){
-    return obj1.x + obj1.width >= obj2.x &&
-        obj1.x <= obj2.x + obj2.width &&
-        obj1.y + obj1.height >= obj2.y &&
-        obj1.y <= obj2.y + obj2.height;
+    return  obj1.x-10 + obj1.width >= obj2.x &&
+            obj1.x-10 <= obj2.x + obj2.width &&
+            obj1.y + obj1.height >= obj2.y &&
+            obj1.y <= obj2.y + obj2.height;
+}
 
+function CalculateScore(){
+    for (let i = 0; i < obstacleArray.length; i++) {
+        if (bird.x > obstacleArray[i].top.x && !obstacleArray[i].isPassed){
+            score++;
+            obstacleArray[i].isPassed = true;
+        }
+    }
+}
 
+function DrawScore(){
+    context.fillStyle = "white";
+    context.font = "45px sans-serif";
+    context.fillText(score, 5, 45);
 }

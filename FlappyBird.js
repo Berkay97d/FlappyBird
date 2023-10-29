@@ -44,6 +44,7 @@ window.onload = function () {
 
     requestAnimationFrame(Update);
     document.addEventListener("keydown", Jump);
+    document.addEventListener("keydown", RestartGame);
 }
 
 function Start(){
@@ -55,7 +56,10 @@ function Start(){
 function Update(){
     requestAnimationFrame(Update)
 
-    if (CheckIsGameOver()) return;
+    if (CheckIsGameOver()) {
+        RestartGame();
+        return;
+    }
 
     context.clearRect(0,0, board.width, board.height);
 
@@ -181,7 +185,7 @@ function ApplyGravity(){
 }
 
 function CheckIsGameOver(){
-    for (let i = 0; i < obstacleArray; i++)
+    for (let i = 0; i < obstacleArray.length; i++)
     {
         if (DetectCollusion(bird, obstacleArray[i].top)){
             return true;
@@ -199,23 +203,50 @@ function CheckIsGameOver(){
 }
 
 function DetectCollusion(obj1, obj2){
-    return  obj1.x-10 + obj1.width >= obj2.x &&
-            obj1.x-10 <= obj2.x + obj2.width &&
-            obj1.y + obj1.height >= obj2.y &&
-            obj1.y <= obj2.y + obj2.height;
+    return  obj1.x - 8 + obj1.width >= obj2.x &&
+            obj1.x - 8 <= obj2.x + obj2.width &&
+            obj1.y - 4 + obj1.height >= obj2.y &&
+            obj1.y + 4 <= obj2.y + obj2.height;
 }
 
 function CalculateScore(){
     for (let i = 0; i < obstacleArray.length; i++) {
-        if (bird.x > obstacleArray[i].top.x && !obstacleArray[i].isPassed){
+        if (bird.x > obstacleArray[i].top.x + obstacleWidth && !obstacleArray[i].isPassed){
             score++;
             obstacleArray[i].isPassed = true;
+
+            IncreaseSpeedOverGameTime();
         }
     }
 }
 
 function DrawScore(){
     context.fillStyle = "white";
-    context.font = "45px sans-serif";
-    context.fillText(score, 5, 45);
+    context.font = "45px sans-serif-bold";
+    context.fillText(score, boardWidth/2, 45);
+}
+
+function IncreaseSpeedOverGameTime(){
+    if (score % 10 === 0){
+        obstacleMoveSpeed += -0.2;
+    }
+}
+
+function RestartGame(e){
+    context.fillStyle = "white";
+    context.font = "45px sans-serif-bold";
+    context.fillText("RESTART GAME", boardWidth/2 - 165, boardHeight/2);
+    context.fillText("Y/N", boardWidth/2 - 40, boardHeight/2 + 75);
+
+    if (e.code == "KeyY"){
+        bird.y = birdYPos;
+        for (let i = 0; i < obstacleArray.length; i++) {
+            obstacleArray[i].top.x += boardWidth + 450;
+            obstacleArray[i].bottom.x += boardWidth + 450;
+            obstacleArray[i].isPassed = false;
+        }
+        score = 0;
+        birdYVelocity = 0;
+    }
+
 }
